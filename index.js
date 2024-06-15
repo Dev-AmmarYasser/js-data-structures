@@ -230,15 +230,233 @@ class Queue {
 
 const queue = new Queue();
 
-queue.enqueue(5);
-queue.enqueue(6);
+// queue.enqueue(5);
+// queue.enqueue(6);
 
-// queue.enqueue(7);
+// // queue.enqueue(7);
 
-queue.print();
+// queue.print();
 
-console.log(queue.peek());
+// console.log(queue.peek());
 
-console.log(queue.size());
+// console.log(queue.size());
 
-queue.print();
+// queue.print();
+
+class CircularQueue {
+  constructor(capacity) {
+    this.items = new Array(capacity);
+    this.capacity = capacity;
+    this.currentLength = 0;
+    this.rear = -1;
+    this.front = -1;
+  }
+
+  isFull() {
+    return this.capacity === this.currentLength;
+  }
+
+  isEmpty() {
+    return this.currentLength === 0;
+  }
+
+  enqueue(element) {
+    if (!this.isFull()) {
+      this.rear = (this.rear + 1) % this.capacity; // To avoid pointing towards an element out of capacity
+      this.items[this.rear] = element;
+      this.currentLength++;
+      if (this.front === -1) {
+        this.front = this.rear;
+      }
+    }
+  }
+
+  dequeue() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    const item = this.items[this.front];
+    this.items[this.front] = null;
+    this.front = (this.front + 1) % this.capacity; // To avoid pointing towards an element out of capacity
+
+    this.currentLength -= 1;
+
+    if (this.isEmpty()) {
+      this.front = -1;
+      this.rear = -1;
+    }
+
+    return item;
+  }
+
+  peek() {
+    if (!this.isEmpty()) {
+      return this.items[this.front];
+    }
+    return null;
+  }
+
+  print() {
+    if (this.isEmpty()) {
+      console.log("Queue is empty");
+    } else {
+      let i;
+      let str = "";
+
+      for (i = this.front; i !== this.rear; i = (i + 1) % this.capacity) {
+        str += this.items[i] + " ";
+      }
+      str += this.items[i];
+      console.log(str);
+    }
+  }
+}
+
+const circularQueue = new CircularQueue(5);
+
+// console.log(circularQueue.isEmpty());
+
+// circularQueue.enqueue(10);
+// circularQueue.enqueue(20);
+// circularQueue.enqueue(30);
+// circularQueue.enqueue(40);
+// circularQueue.enqueue(50);
+
+// console.log(circularQueue.isFull());
+// circularQueue.print();
+
+// console.log(circularQueue.dequeue());
+
+// circularQueue.print();
+
+// circularQueue.enqueue(60);
+
+// circularQueue.print();
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.size = 0;
+  }
+
+  isEmpty() {
+    return this.size === 0;
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  // Big-O = O(1)
+  prepend(value) {
+    const node = new Node(value);
+    if (this.isEmpty()) {
+      this.head = node;
+    } else {
+      node.next = this.head;
+      this.head = node;
+    }
+    this.size++;
+  }
+
+  // -------------------------------------
+
+  // Big-O = O(n)
+  append(value) {
+    const node = new Node(value);
+
+    if (this.isEmpty()) {
+      this.head = node;
+    } else {
+      let prev = this.head;
+      while (prev.next) {
+        prev = prev.next;
+      }
+      prev.next = node;
+    }
+    this.size++;
+  }
+
+  insert(value, index) {
+    if (index > this.size || index < 0) return;
+    if (index === 0) {
+      this.prepend(value);
+    } else {
+      const node = new Node(value);
+      let prev = this.head;
+      for (let i = 0; i < index - 1; i++) {
+        prev = prev.next;
+      }
+      node.next = prev.next;
+      prev.next = node;
+      this.size++;
+    }
+  }
+
+  removeFrom(index) {
+    if (index >= this.size || index < 0) return null;
+    let removedNode;
+    if (index === 0) {
+      removedNode = this.head;
+      this.head = this.head.next;
+    } else {
+      let prev = this.head;
+      for (let i = 0; i < index - 1; i++) {
+        prev = prev.next;
+      }
+      removedNode = prev.next;
+      prev.next = removedNode.next;
+    }
+    this.size--;
+    return removedNode.value;
+  }
+
+  print() {
+    if (this.isEmpty()) {
+      console.log("The List is Empty...");
+    } else {
+      let curr = this.head;
+      let listValues = "";
+      while (curr) {
+        listValues += `${curr.value} `;
+        curr = curr.next;
+      }
+      console.log(listValues);
+    }
+  }
+}
+
+const list = new LinkedList();
+
+list.insert(10, 0);
+list.print();
+
+list.insert(20, 0);
+list.print();
+
+list.insert(30, 1);
+list.print();
+
+list.insert(40, 2);
+list.print();
+
+console.log(list.getSize());
+
+console.log(list.removeFrom(10));
+
+console.log(list.removeFrom(0));
+
+list.print();
+
+console.log(list.removeFrom(1));
+
+list.print();
+
+console.log(list.getSize());
