@@ -333,130 +333,102 @@ const circularQueue = new CircularQueue(5);
 
 // circularQueue.print();
 
-class Node {
-  constructor(value) {
-    this.value = value;
-    this.next = null;
-  }
-}
+const LinkedList = require("./linked-list");
 
-class LinkedList {
+class LinkedListStack {
   constructor() {
-    this.head = null;
-    this.size = 0;
+    this.list = new LinkedList();
+  }
+
+  push(value) {
+    this.list.prependTail(value);
+  }
+  pop() {
+    this.list.removeFromFront();
+  }
+
+  peek() {
+    return this.list.head.value;
   }
 
   isEmpty() {
-    return this.size === 0;
+    return this.list.isEmpty();
   }
 
   getSize() {
-    return this.size;
-  }
-
-  // Big-O = O(1)
-  prepend(value) {
-    const node = new Node(value);
-    if (this.isEmpty()) {
-      this.head = node;
-    } else {
-      node.next = this.head;
-      this.head = node;
-    }
-    this.size++;
-  }
-
-  // -------------------------------------
-
-  // Big-O = O(n)
-  append(value) {
-    const node = new Node(value);
-
-    if (this.isEmpty()) {
-      this.head = node;
-    } else {
-      let prev = this.head;
-      while (prev.next) {
-        prev = prev.next;
-      }
-      prev.next = node;
-    }
-    this.size++;
-  }
-
-  insert(value, index) {
-    if (index > this.size || index < 0) return;
-    if (index === 0) {
-      this.prepend(value);
-    } else {
-      const node = new Node(value);
-      let prev = this.head;
-      for (let i = 0; i < index - 1; i++) {
-        prev = prev.next;
-      }
-      node.next = prev.next;
-      prev.next = node;
-      this.size++;
-    }
-  }
-
-  removeFrom(index) {
-    if (index >= this.size || index < 0) return null;
-    let removedNode;
-    if (index === 0) {
-      removedNode = this.head;
-      this.head = this.head.next;
-    } else {
-      let prev = this.head;
-      for (let i = 0; i < index - 1; i++) {
-        prev = prev.next;
-      }
-      removedNode = prev.next;
-      prev.next = removedNode.next;
-    }
-    this.size--;
-    return removedNode.value;
+    return this.list.getSize();
   }
 
   print() {
-    if (this.isEmpty()) {
-      console.log("The List is Empty...");
-    } else {
-      let curr = this.head;
-      let listValues = "";
-      while (curr) {
-        listValues += `${curr.value} `;
-        curr = curr.next;
-      }
-      console.log(listValues);
-    }
+    this.list.print();
   }
 }
 
-const list = new LinkedList();
+const linkedListStack = new LinkedListStack();
 
-list.insert(10, 0);
-list.print();
+linkedListStack.push(10);
+linkedListStack.push(20);
 
-list.insert(20, 0);
-list.print();
+linkedListStack.print();
 
-list.insert(30, 1);
-list.print();
+linkedListStack.pop();
 
-list.insert(40, 2);
-list.print();
+linkedListStack.print();
 
-console.log(list.getSize());
+console.log(linkedListStack.peek());
 
-console.log(list.removeFrom(10));
+console.log(linkedListStack.isEmpty());
 
-console.log(list.removeFrom(0));
+console.log(linkedListStack.getSize());
 
-list.print();
+linkedListStack.print();
 
-console.log(list.removeFrom(1));
+class LinkedListQueue {
+  constructor() {
+    this.list = new LinkedList();
+  }
+  enqueue(value) {
+    this.list.appendTail(value);
+  }
 
-list.print();
+  dequeue() {
+    this.list.removeFromFront();
+  }
 
-console.log(list.getSize());
+  peek() {
+    return this.list.tail.value;
+  }
+
+  isEmpty() {
+    return this.list.isEmpty();
+  }
+
+  getSize() {
+    return this.list.getSize();
+  }
+
+  print() {
+    this.list.print();
+  }
+}
+
+const linkedListQueue = new LinkedListQueue();
+
+console.log("-".repeat(50));
+
+linkedListQueue.enqueue(10);
+linkedListQueue.enqueue(20);
+
+linkedListQueue.print();
+
+linkedListQueue.dequeue();
+
+linkedListQueue.print();
+
+console.log(linkedListQueue.peek());
+
+console.log(linkedListQueue.isEmpty());
+
+console.log(linkedListQueue.getSize());
+
+linkedListQueue.print();
